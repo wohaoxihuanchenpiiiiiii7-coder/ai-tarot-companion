@@ -4,7 +4,7 @@ import { SecondaryButton } from '../components/Buttons'
 import { GenerationNotice } from '../components/GenerationNotice'
 import { TarotCardBack } from '../components/TarotCardBack'
 import { copy } from '../content/copy'
-import { generateMockTarotReading } from '../lib/mockAi'
+import { generateTarotReading as requestTarotReading } from '../lib/aiApi'
 import { drawOneCard, drawThreeCards } from '../lib/tarot'
 import {
   canGenerateReading,
@@ -57,11 +57,13 @@ export function DrawPage({ setup, onBack, onComplete }: DrawPageProps) {
     recordReadingGeneration()
 
     try {
-      await new Promise((resolve) =>
-        window.setTimeout(resolve, MOCK_GENERATION_DELAY),
-      )
       const input = { ...setup, drawnCards }
-      const output = generateMockTarotReading(input)
+      const [output] = await Promise.all([
+        requestTarotReading(input),
+        new Promise((resolve) =>
+          window.setTimeout(resolve, MOCK_GENERATION_DELAY),
+        ),
+      ])
 
       if (!isMounted.current) return
 

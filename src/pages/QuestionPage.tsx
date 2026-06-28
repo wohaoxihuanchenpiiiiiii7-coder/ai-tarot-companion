@@ -8,7 +8,7 @@ import {
 import { GenerationNotice } from '../components/GenerationNotice'
 import { SpreadSelector } from '../components/SpreadSelector'
 import { copy } from '../content/copy'
-import { optimizeMockQuestion } from '../lib/mockAi'
+import { optimizeQuestion as requestQuestionOptimization } from '../lib/aiApi'
 import {
   canOptimizeQuestion,
   recordQuestionOptimization,
@@ -80,10 +80,12 @@ export function QuestionPage({ onContinue }: QuestionPageProps) {
     recordQuestionOptimization()
 
     try {
-      await new Promise((resolve) =>
-        window.setTimeout(resolve, MOCK_OPTIMIZATION_DELAY),
-      )
-      const result = optimizeMockQuestion({ category, rawQuestion: question })
+      const [result] = await Promise.all([
+        requestQuestionOptimization({ category, rawQuestion: question }),
+        new Promise((resolve) =>
+          window.setTimeout(resolve, MOCK_OPTIMIZATION_DELAY),
+        ),
+      ])
 
       if (!isMounted.current) return
 

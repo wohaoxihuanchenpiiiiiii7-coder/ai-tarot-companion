@@ -10,7 +10,7 @@ interaction metaphor rather than a source of deterministic predictions.
 - TypeScript
 - Vite
 - Tailwind CSS 4
-- Server-side AI API route planned for the MVP
+- Hono server API with a mock AI provider abstraction
 
 ## Current MVP scope
 
@@ -36,6 +36,10 @@ npm run dev
 
 Open the URL printed by Vite, normally `http://localhost:5173`.
 
+During local development, Vite serves the frontend and mounts the same Hono
+handlers under `/api/*`. EdgeSpark can use `server/src/index.ts` as its worker
+entry point later.
+
 To verify a production build:
 
 ```bash
@@ -51,6 +55,8 @@ On Windows PowerShell systems that block `npm.ps1`, use `npm.cmd` in place of
 Copy `.env.example` to `.env` only when local variables are needed. AI API keys
 must remain server-side and must never use Vite's client-exposed `VITE_` prefix.
 Do not commit `.env` files or real credentials.
+
+The current default is `AI_PROVIDER=mock`; it makes no external AI request.
 
 ## Project status
 

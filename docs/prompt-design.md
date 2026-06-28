@@ -170,8 +170,16 @@ Return only JSON matching the output schema.
 
 ## Implementation notes
 
-- Send structured input from a server-side API route; never call an AI provider
-  directly from the browser.
+- The browser sends structured input only to `/api/tarot-reading` and
+  `/api/optimize-question`; it never calls an AI provider directly.
+- The EdgeSpark-compatible Hono server in `server/src/index.ts` delegates both
+  routes to the provider abstraction in `server/src/lib/aiProvider.ts`.
+- `AI_PROVIDER=mock` is the current default. Unknown or unavailable providers
+  safely fall back to the mock implementation until a real server-side adapter
+  is intentionally added.
+- Provider keys and model settings are server-only variables. A future
+  EdgeSpark integration should read declared vars and secrets from its runtime
+  SDK; no credential may use a client-exposed `VITE_` name.
 - Validate model JSON before converting it to a saved reading result.
 - Treat the templates as versioned product content and evaluate changes against
   relationship, career, self-reflection, daily, ambiguous, and safety-sensitive
