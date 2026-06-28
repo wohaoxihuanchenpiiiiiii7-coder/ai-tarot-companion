@@ -1,19 +1,74 @@
+import { useState } from 'react'
+import { AppShell } from './components/AppShell'
+import { DrawPage } from './pages/DrawPage'
+import { HomePage } from './pages/HomePage'
+import { QuestionPage } from './pages/QuestionPage'
+import { ResultPage } from './pages/ResultPage'
+import type { CompletedReading, ReadingSetup } from './types/flow'
+
+type AppView = 'home' | 'question' | 'draw' | 'result'
+
 function App() {
-  return (
-    <main className="grid min-h-screen place-items-center bg-slate-950 px-6 text-slate-100">
-      <section className="text-center">
-        <p className="mb-3 text-sm font-medium uppercase tracking-[0.3em] text-violet-300">
-          AI Tarot Companion
-        </p>
-        <h1 className="text-4xl font-semibold tracking-tight sm:text-5xl">
-          Project initialized
-        </h1>
-        <p className="mt-4 text-slate-400">
-          React, TypeScript, Vite, and Tailwind CSS are ready.
-        </p>
-      </section>
-    </main>
-  )
+  const [view, setView] = useState<AppView>('home')
+  const [readingSetup, setReadingSetup] = useState<ReadingSetup | null>(null)
+  const [completedReading, setCompletedReading] =
+    useState<CompletedReading | null>(null)
+
+  function returnHome() {
+    setView('home')
+    setReadingSetup(null)
+    setCompletedReading(null)
+  }
+
+  function beginQuestionReading(setup: ReadingSetup) {
+    setReadingSetup(setup)
+    setView('draw')
+  }
+
+  function beginDailyReading() {
+    setReadingSetup({
+      mode: 'daily',
+      category: 'daily',
+      spreadType: 'one-card',
+    })
+    setView('draw')
+  }
+
+  function finishReading(reading: CompletedReading) {
+    setCompletedReading(reading)
+    setView('result')
+  }
+
+  function renderView() {
+    if (view === 'question') {
+      return <QuestionPage onContinue={beginQuestionReading} />
+    }
+
+    if (view === 'draw' && readingSetup) {
+      return (
+        <DrawPage
+          setup={readingSetup}
+          onBack={() =>
+            setView(readingSetup.mode === 'daily' ? 'home' : 'question')
+          }
+          onComplete={finishReading}
+        />
+      )
+    }
+
+    if (view === 'result' && completedReading) {
+      return <ResultPage reading={completedReading} onHome={returnHome} />
+    }
+
+    return (
+      <HomePage
+        onAskQuestion={() => setView('question')}
+        onDailyTarot={beginDailyReading}
+      />
+    )
+  }
+
+  return <AppShell onHome={returnHome}>{renderView()}</AppShell>
 }
 
 export default App

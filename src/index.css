@@ -1,14 +1,100 @@
 @import "tailwindcss";
 
+@theme {
+  --font-sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", sans-serif;
+  --font-serif: Georgia, Cambria, "Times New Roman", serif;
+
+  --color-cream-50: #fffdf8;
+  --color-cream-100: #f8f2e8;
+  --color-cream-200: #eee3d3;
+
+  --color-plum-50: #f4eef7;
+  --color-plum-100: #e8dced;
+  --color-plum-200: #d4bddc;
+  --color-plum-300: #bb96c7;
+  --color-plum-400: #9d6dad;
+  --color-plum-500: #80518f;
+  --color-plum-600: #684071;
+  --color-plum-700: #54345b;
+  --color-plum-800: #432849;
+  --color-plum-900: #351f3a;
+  --color-plum-950: #241327;
+
+  --color-gold-100: #fff7d9;
+  --color-gold-200: #f8e9a3;
+  --color-gold-300: #efd36d;
+  --color-gold-400: #dab344;
+
+  --color-ink-300: #a49aa5;
+  --color-ink-400: #827783;
+  --color-ink-500: #685f69;
+  --color-ink-600: #514952;
+  --color-ink-700: #3f3840;
+  --color-ink-800: #302a31;
+  --color-ink-900: #241f25;
+
+  --radius-card: 1.5rem;
+  --shadow-soft: 0 18px 50px -30px rgb(53 31 58 / 0.38);
+  --shadow-card: 0 24px 55px -24px rgb(36 19 39 / 0.55);
+}
+
 :root {
-  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
-  color-scheme: dark;
+  font-family: var(--font-sans);
+  color: var(--color-ink-900);
+  background: var(--color-cream-100);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--color-cream-100);
 }
 
 body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
+}
+
+button,
+textarea {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+.app-background {
+  background:
+    radial-gradient(circle at 12% 2%, rgb(239 211 109 / 0.16), transparent 28rem),
+    radial-gradient(circle at 92% 18%, rgb(187 150 199 / 0.18), transparent 30rem),
+    linear-gradient(180deg, var(--color-cream-50), var(--color-cream-100));
+}
+
+.tarot-card-back {
+  background-color: var(--color-plum-800);
+  background-image:
+    radial-gradient(circle at center, rgb(239 211 109 / 0.18) 0 1px, transparent 1.5px),
+    linear-gradient(135deg, rgb(255 255 255 / 0.035) 25%, transparent 25%),
+    linear-gradient(315deg, rgb(255 255 255 / 0.035) 25%, transparent 25%);
+  background-position: center, 0 0, 0 0;
+  background-size: 18px 18px, 24px 24px, 24px 24px;
+}
+
+::selection {
+  color: var(--color-plum-950);
+  background: var(--color-gold-200);
+}
+
+:focus-visible {
+  outline: 3px solid var(--color-gold-400);
+  outline-offset: 3px;
 }
