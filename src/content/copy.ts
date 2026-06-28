@@ -28,8 +28,9 @@ export const copy = {
     cardWhisper: '感受当下',
     recentReadings: { zh: '最近记录', en: 'Recent Readings' },
     latestThree: '最近 3 条',
-    emptyTitle: '你的探索记录会出现在这里',
-    emptyDescription: '完成一次解读后，就能在这里回看最近的心情与发现。',
+    clearHistory: { zh: '清空记录', en: 'Clear History' },
+    emptyDescription: '还没有抽牌记录。完成一次解读后，它会出现在这里。',
+    firstCard: '首张牌',
   },
   question: {
     pageTitle: { zh: '问一个问题', en: 'Ask a Question' },

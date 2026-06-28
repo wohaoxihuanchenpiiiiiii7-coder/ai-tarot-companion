@@ -1,13 +1,22 @@
 import { BilingualLabel } from '../components/BilingualLabel'
 import { PrimaryButton, SecondaryButton } from '../components/Buttons'
+import { RecentReadingCard } from '../components/RecentReadingCard'
 import { copy } from '../content/copy'
+import type { ReadingResult } from '../types/tarot'
 
 interface HomePageProps {
   onAskQuestion: () => void
   onDailyTarot: () => void
+  recentReadings: ReadingResult[]
+  onClearHistory: () => void
 }
 
-export function HomePage({ onAskQuestion, onDailyTarot }: HomePageProps) {
+export function HomePage({
+  onAskQuestion,
+  onDailyTarot,
+  recentReadings,
+  onClearHistory,
+}: HomePageProps) {
   return (
     <div className="space-y-14 sm:space-y-20">
       <section className="grid items-center gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:gap-16">
@@ -83,19 +92,39 @@ export function HomePage({ onAskQuestion, onDailyTarot }: HomePageProps) {
               variant="sectionTitle"
             />
           </h2>
-          <span className="text-xs text-ink-400">{copy.home.latestThree}</span>
+          {recentReadings.length > 0 ? (
+            <SecondaryButton
+              onClick={onClearHistory}
+              className="min-h-10 px-4 py-2"
+            >
+              <BilingualLabel
+                {...copy.home.clearHistory}
+                variant="button"
+                align="center"
+              />
+            </SecondaryButton>
+          ) : (
+            <span className="text-xs text-ink-400">
+              {copy.home.latestThree}
+            </span>
+          )}
         </div>
-        <div className="rounded-card border border-dashed border-plum-200 bg-white/45 px-5 py-10 text-center">
-          <span className="mx-auto grid size-11 place-items-center rounded-full bg-plum-50 text-plum-500">
-            ✧
-          </span>
-          <p className="mt-4 font-serif text-xl font-semibold text-plum-900">
-            {copy.home.emptyTitle}
-          </p>
-          <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-ink-500">
-            {copy.home.emptyDescription}
-          </p>
-        </div>
+        {recentReadings.length > 0 ? (
+          <div className="grid gap-4 lg:grid-cols-3">
+            {recentReadings.map((reading) => (
+              <RecentReadingCard key={reading.id} reading={reading} />
+            ))}
+          </div>
+        ) : (
+          <div className="rounded-card border border-dashed border-plum-200 bg-white/45 px-5 py-10 text-center">
+            <span className="mx-auto grid size-11 place-items-center rounded-full bg-plum-50 text-plum-500">
+              ✧
+            </span>
+            <p className="mx-auto mt-4 max-w-md font-serif text-lg leading-7 text-plum-900">
+              {copy.home.emptyDescription}
+            </p>
+          </div>
+        )}
       </section>
     </div>
   )
