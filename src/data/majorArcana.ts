@@ -1,0 +1,224 @@
+import type { TarotCard } from '../types/tarot'
+
+export const majorArcana: TarotCard[] = [
+  {
+    id: 'the-fool',
+    number: 0,
+    nameEn: 'The Fool',
+    nameZh: '愚者',
+    uprightKeywords: ['新的开始', '自由', '信任', '冒险'],
+    reversedKeywords: ['鲁莽', '迟疑', '缺乏准备', '逃避责任'],
+    traditionalMeaning:
+      '象征带着初心走向未知，也提醒人在拥抱新可能时保持觉察与信任。',
+  },
+  {
+    id: 'the-magician',
+    number: 1,
+    nameEn: 'The Magician',
+    nameZh: '魔术师',
+    uprightKeywords: ['行动力', '创造', '资源', '专注'],
+    reversedKeywords: ['操控', '分心', '能力受阻', '未兑现的潜力'],
+    traditionalMeaning:
+      '象征运用已有资源把想法带入现实，并以清晰意图推动事情发生。',
+  },
+  {
+    id: 'the-high-priestess',
+    number: 2,
+    nameEn: 'The High Priestess',
+    nameZh: '女祭司',
+    uprightKeywords: ['直觉', '内在智慧', '静观', '潜意识'],
+    reversedKeywords: ['忽视直觉', '封闭', '困惑', '隐藏信息'],
+    traditionalMeaning:
+      '象征安静聆听内在声音，让尚未显明的感受与真相逐渐浮现。',
+  },
+  {
+    id: 'the-empress',
+    number: 3,
+    nameEn: 'The Empress',
+    nameZh: '皇后',
+    uprightKeywords: ['丰盛', '滋养', '创造力', '感受力'],
+    reversedKeywords: ['过度付出', '依赖', '创造受阻', '忽略自己'],
+    traditionalMeaning:
+      '象征滋养、丰盛与生命力，鼓励给予关系和创意足够的空间成长。',
+  },
+  {
+    id: 'the-emperor',
+    number: 4,
+    nameEn: 'The Emperor',
+    nameZh: '皇帝',
+    uprightKeywords: ['秩序', '稳定', '责任', '边界'],
+    reversedKeywords: ['控制欲', '僵化', '权威冲突', '缺乏纪律'],
+    traditionalMeaning:
+      '象征结构、边界与可靠的承担，提醒人用稳定行动建立安全感。',
+  },
+  {
+    id: 'the-hierophant',
+    number: 5,
+    nameEn: 'The Hierophant',
+    nameZh: '教皇',
+    uprightKeywords: ['传统', '学习', '信念', '指引'],
+    reversedKeywords: ['打破惯例', '教条', '价值冲突', '独立思考'],
+    traditionalMeaning:
+      '象征从传统、导师或共同信念中学习，同时辨认真正适合自己的价值。',
+  },
+  {
+    id: 'the-lovers',
+    number: 6,
+    nameEn: 'The Lovers',
+    nameZh: '恋人',
+    uprightKeywords: ['联结', '选择', '一致', '亲密'],
+    reversedKeywords: ['失衡', '价值分歧', '疏离', '艰难选择'],
+    traditionalMeaning:
+      '象征关系中的真诚联结与价值选择，强调让决定与内心保持一致。',
+  },
+  {
+    id: 'the-chariot',
+    number: 7,
+    nameEn: 'The Chariot',
+    nameZh: '战车',
+    uprightKeywords: ['意志', '前进', '掌控方向', '决心'],
+    reversedKeywords: ['失去方向', '急躁', '内在冲突', '推进受阻'],
+    traditionalMeaning:
+      '象征集中意志驾驭不同力量，以明确方向和自律持续向前。',
+  },
+  {
+    id: 'strength',
+    number: 8,
+    nameEn: 'Strength',
+    nameZh: '力量',
+    uprightKeywords: ['勇气', '温柔坚定', '耐心', '自我接纳'],
+    reversedKeywords: ['自我怀疑', '情绪失控', '脆弱', '信心不足'],
+    traditionalMeaning:
+      '象征以温柔而坚定的方式面对本能与恐惧，真正的力量来自内在稳定。',
+  },
+  {
+    id: 'the-hermit',
+    number: 9,
+    nameEn: 'The Hermit',
+    nameZh: '隐者',
+    uprightKeywords: ['独处', '内省', '寻找答案', '智慧'],
+    reversedKeywords: ['孤立', '退缩', '过度思虑', '拒绝指引'],
+    traditionalMeaning:
+      '象征暂时离开喧嚣，通过独处与反思寻找属于自己的清晰答案。',
+  },
+  {
+    id: 'wheel-of-fortune',
+    number: 10,
+    nameEn: 'Wheel of Fortune',
+    nameZh: '命运之轮',
+    uprightKeywords: ['转变', '周期', '机会', '顺势而为'],
+    reversedKeywords: ['阻力', '重复模式', '失控感', '延迟'],
+    traditionalMeaning:
+      '象征生命周期与局势变化，提醒人在不可控之中留意新的转机。',
+  },
+  {
+    id: 'justice',
+    number: 11,
+    nameEn: 'Justice',
+    nameZh: '正义',
+    uprightKeywords: ['公平', '真相', '责任', '因果'],
+    reversedKeywords: ['偏见', '逃避责任', '不公', '自我欺骗'],
+    traditionalMeaning:
+      '象征诚实面对事实与选择的后果，并在理性和价值之间寻求平衡。',
+  },
+  {
+    id: 'the-hanged-man',
+    number: 12,
+    nameEn: 'The Hanged Man',
+    nameZh: '倒吊人',
+    uprightKeywords: ['暂停', '换位思考', '放下', '等待'],
+    reversedKeywords: ['停滞', '无谓牺牲', '抗拒改变', '拖延'],
+    traditionalMeaning:
+      '象征有意识地暂停与放下旧视角，让不同理解在等待中出现。',
+  },
+  {
+    id: 'death',
+    number: 13,
+    nameEn: 'Death',
+    nameZh: '死神',
+    uprightKeywords: ['结束', '转化', '释放', '新阶段'],
+    reversedKeywords: ['抗拒结束', '停滞', '害怕变化', '难以放手'],
+    traditionalMeaning:
+      '象征一个阶段的结束与深层转化，并非字面死亡，而是为新生腾出空间。',
+  },
+  {
+    id: 'temperance',
+    number: 14,
+    nameEn: 'Temperance',
+    nameZh: '节制',
+    uprightKeywords: ['平衡', '调和', '耐心', '整合'],
+    reversedKeywords: ['失衡', '过度', '急躁', '难以协调'],
+    traditionalMeaning:
+      '象征调和不同需求，以耐心和适度找到可持续的中间道路。',
+  },
+  {
+    id: 'the-devil',
+    number: 15,
+    nameEn: 'The Devil',
+    nameZh: '恶魔',
+    uprightKeywords: ['束缚', '欲望', '依赖', '阴影'],
+    reversedKeywords: ['觉察束缚', '挣脱', '重新选择', '恢复自主'],
+    traditionalMeaning:
+      '象征未被觉察的依赖与限制，也提醒人看见自己仍然拥有选择。',
+  },
+  {
+    id: 'the-tower',
+    number: 16,
+    nameEn: 'The Tower',
+    nameZh: '高塔',
+    uprightKeywords: ['突变', '真相揭露', '旧结构瓦解', '醒悟'],
+    reversedKeywords: ['抗拒改变', '延迟危机', '内在动荡', '余震'],
+    traditionalMeaning:
+      '象征不再稳固的结构被打破，虽然过程震动，却可能带来真实的重建。',
+  },
+  {
+    id: 'the-star',
+    number: 17,
+    nameEn: 'The Star',
+    nameZh: '星星',
+    uprightKeywords: ['希望', '疗愈', '灵感', '信任未来'],
+    reversedKeywords: ['失望', '信心动摇', '与自己疏离', '缺乏灵感'],
+    traditionalMeaning:
+      '象征风暴后的希望与疗愈，邀请人重新相信自身和未来的可能性。',
+  },
+  {
+    id: 'the-moon',
+    number: 18,
+    nameEn: 'The Moon',
+    nameZh: '月亮',
+    uprightKeywords: ['潜意识', '不确定', '梦境', '敏感'],
+    reversedKeywords: ['迷雾消散', '压抑情绪', '误解', '恐惧浮现'],
+    traditionalMeaning:
+      '象征不确定与潜意识的波动，提醒人在看不清时温柔辨认感受和事实。',
+  },
+  {
+    id: 'the-sun',
+    number: 19,
+    nameEn: 'The Sun',
+    nameZh: '太阳',
+    uprightKeywords: ['喜悦', '清晰', '活力', '成功'],
+    reversedKeywords: ['短暂低落', '过度乐观', '延迟喜悦', '自信受阻'],
+    traditionalMeaning:
+      '象征清晰、生命力与坦然表达，鼓励看见当下真实而明亮的部分。',
+  },
+  {
+    id: 'judgement',
+    number: 20,
+    nameEn: 'Judgement',
+    nameZh: '审判',
+    uprightKeywords: ['觉醒', '复盘', '召唤', '自我宽恕'],
+    reversedKeywords: ['自我批判', '逃避反思', '犹豫', '拒绝召唤'],
+    traditionalMeaning:
+      '象征回顾过去并作出清醒回应，在理解和宽恕中走向新的选择。',
+  },
+  {
+    id: 'the-world',
+    number: 21,
+    nameEn: 'The World',
+    nameZh: '世界',
+    uprightKeywords: ['完成', '整合', '圆满', '新的循环'],
+    reversedKeywords: ['尚未完成', '缺少收尾', '停滞', '需要整合'],
+    traditionalMeaning:
+      '象征一个周期的完成与经验整合，也预示下一段旅程即将展开。',
+  },
+]
