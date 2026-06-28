@@ -14,6 +14,7 @@ import {
   optimizeQuestion,
   type AiProviderConfig,
 } from './lib/aiProvider'
+import { AiProviderError } from './lib/aiProviderError'
 
 type Bindings = AiProviderConfig
 
@@ -75,6 +76,20 @@ function isOptimizeQuestionInput(value: unknown): value is OptimizeQuestionInput
   )
 }
 
+function handleProviderError(error: unknown) {
+  if (error instanceof AiProviderError) {
+    return {
+      status: error.status,
+      body: { error: error.publicMessage },
+    }
+  }
+
+  return {
+    status: 500 as const,
+    body: { error: 'Unable to complete AI request.' },
+  }
+}
+
 app.post('/api/tarot-reading', async (context) => {
   try {
     const input: unknown = await context.req.json()
@@ -85,8 +100,9 @@ app.post('/api/tarot-reading', async (context) => {
 
     const output = await generateTarotReading(input, context.env)
     return context.json(output)
-  } catch {
-    return context.json({ error: 'Unable to generate tarot reading.' }, 500)
+  } catch (error) {
+    const apiError = handleProviderError(error)
+    return context.json(apiError.body, apiError.status)
   }
 })
 
@@ -100,8 +116,9 @@ app.post('/api/optimize-question', async (context) => {
 
     const output = await optimizeQuestion(input, context.env)
     return context.json(output)
-  } catch {
-    return context.json({ error: 'Unable to optimize question.' }, 500)
+  } catch (error) {
+    const apiError = handleProviderError(error)
+    return context.json(apiError.body, apiError.status)
   }
 })
 

@@ -61,6 +61,7 @@ export default defineConfig(({ mode }) => {
       localApiPlugin({
         AI_PROVIDER: serverEnv.AI_PROVIDER,
         AI_API_KEY: serverEnv.AI_API_KEY,
+        AI_BASE_URL: serverEnv.AI_BASE_URL,
         AI_MODEL: serverEnv.AI_MODEL,
       }),
     ],

@@ -174,9 +174,14 @@ Return only JSON matching the output schema.
   `/api/optimize-question`; it never calls an AI provider directly.
 - The EdgeSpark-compatible Hono server in `server/src/index.ts` delegates both
   routes to the provider abstraction in `server/src/lib/aiProvider.ts`.
-- `AI_PROVIDER=mock` is the current default. Unknown or unavailable providers
-  safely fall back to the mock implementation until a real server-side adapter
-  is intentionally added.
+- `AI_PROVIDER=mock` is the default and requires no external service.
+- `AI_PROVIDER=deepseek` selects the server-side DeepSeek adapter. Missing
+  configuration, upstream failures, empty content, invalid JSON, or output that
+  does not match the TypeScript contract produce a safe API error; DeepSeek
+  configuration errors never silently fall back to mock.
+- DeepSeek requests use its OpenAI-compatible `/chat/completions` endpoint with
+  JSON output mode. The server sends the structured reading context and the
+  Chinese safety/tone instructions documented above.
 - Provider keys and model settings are server-only variables. A future
   EdgeSpark integration should read declared vars and secrets from its runtime
   SDK; no credential may use a client-exposed `VITE_` name.
@@ -184,5 +189,5 @@ Return only JSON matching the output schema.
 - Treat the templates as versioned product content and evaluate changes against
   relationship, career, self-reflection, daily, ambiguous, and safety-sensitive
   examples.
-- The current `mockAi` implementation mirrors this contract without making any
-  network request.
+- The `mockAi` implementation mirrors this contract without making any network
+  request and remains available for offline development.
