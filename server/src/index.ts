@@ -90,7 +90,7 @@ function handleProviderError(error: unknown) {
   }
 }
 
-app.post('/api/tarot-reading', async (context) => {
+app.post('/api/public/tarot-reading', async (context) => {
   try {
     const input: unknown = await context.req.json()
 
@@ -106,7 +106,7 @@ app.post('/api/tarot-reading', async (context) => {
   }
 })
 
-app.post('/api/optimize-question', async (context) => {
+app.post('/api/public/optimize-question', async (context) => {
   try {
     const input: unknown = await context.req.json()
 

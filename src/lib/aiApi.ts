@@ -25,11 +25,11 @@ async function postToInternalApi<TInput, TOutput>(
 export function generateTarotReading(
   input: TarotReadingInput,
 ): Promise<TarotReadingOutput> {
-  return postToInternalApi('/api/tarot-reading', input)
+  return postToInternalApi('/api/public/tarot-reading', input)
 }
 
 export function optimizeQuestion(
   input: OptimizeQuestionInput,
 ): Promise<OptimizeQuestionOutput> {
-  return postToInternalApi('/api/optimize-question', input)
+  return postToInternalApi('/api/public/optimize-question', input)
 }

@@ -170,8 +170,10 @@ Return only JSON matching the output schema.
 
 ## Implementation notes
 
-- The browser sends structured input only to `/api/tarot-reading` and
-  `/api/optimize-question`; it never calls an AI provider directly.
+- The browser sends structured input only to `/api/public/tarot-reading` and
+  `/api/public/optimize-question`; it never calls an AI provider directly. The
+  public prefix preserves anonymous MVP access under EdgeSpark's path-based
+  authentication rules.
 - The EdgeSpark-compatible Hono server in `server/src/index.ts` delegates both
   routes to the provider abstraction in `server/src/lib/aiProvider.ts`.
 - `AI_PROVIDER=mock` is the default and requires no external service.
