@@ -6,6 +6,7 @@ export const majorArcana: TarotCard[] = [
     number: 0,
     nameEn: 'The Fool',
     nameZh: '愚者',
+    imageUrl: '/assets/tarot/cards/00-fool.png',
     uprightKeywords: ['新的开始', '自由', '信任', '冒险'],
     reversedKeywords: ['鲁莽', '迟疑', '缺乏准备', '逃避责任'],
     traditionalMeaning:
@@ -16,6 +17,7 @@ export const majorArcana: TarotCard[] = [
     number: 1,
     nameEn: 'The Magician',
     nameZh: '魔术师',
+    imageUrl: '/assets/tarot/cards/01-magician.png',
     uprightKeywords: ['行动力', '创造', '资源', '专注'],
     reversedKeywords: ['操控', '分心', '能力受阻', '未兑现的潜力'],
     traditionalMeaning:
@@ -26,6 +28,7 @@ export const majorArcana: TarotCard[] = [
     number: 2,
     nameEn: 'The High Priestess',
     nameZh: '女祭司',
+    imageUrl: '/assets/tarot/cards/02-high-priestess.png',
     uprightKeywords: ['直觉', '内在智慧', '静观', '潜意识'],
     reversedKeywords: ['忽视直觉', '封闭', '困惑', '隐藏信息'],
     traditionalMeaning:
@@ -36,6 +39,7 @@ export const majorArcana: TarotCard[] = [
     number: 3,
     nameEn: 'The Empress',
     nameZh: '皇后',
+    imageUrl: '/assets/tarot/cards/03-empress.png',
     uprightKeywords: ['丰盛', '滋养', '创造力', '感受力'],
     reversedKeywords: ['过度付出', '依赖', '创造受阻', '忽略自己'],
     traditionalMeaning:
@@ -46,6 +50,7 @@ export const majorArcana: TarotCard[] = [
     number: 4,
     nameEn: 'The Emperor',
     nameZh: '皇帝',
+    imageUrl: '/assets/tarot/cards/04-emperor.png',
     uprightKeywords: ['秩序', '稳定', '责任', '边界'],
     reversedKeywords: ['控制欲', '僵化', '权威冲突', '缺乏纪律'],
     traditionalMeaning:
@@ -56,6 +61,7 @@ export const majorArcana: TarotCard[] = [
     number: 5,
     nameEn: 'The Hierophant',
     nameZh: '教皇',
+    imageUrl: '/assets/tarot/cards/05-hierophant.png',
     uprightKeywords: ['传统', '学习', '信念', '指引'],
     reversedKeywords: ['打破惯例', '教条', '价值冲突', '独立思考'],
     traditionalMeaning:
@@ -66,6 +72,7 @@ export const majorArcana: TarotCard[] = [
     number: 6,
     nameEn: 'The Lovers',
     nameZh: '恋人',
+    imageUrl: '/assets/tarot/cards/06-lovers.png',
     uprightKeywords: ['联结', '选择', '一致', '亲密'],
     reversedKeywords: ['失衡', '价值分歧', '疏离', '艰难选择'],
     traditionalMeaning:
@@ -76,6 +83,7 @@ export const majorArcana: TarotCard[] = [
     number: 7,
     nameEn: 'The Chariot',
     nameZh: '战车',
+    imageUrl: '/assets/tarot/cards/07-chariot.png',
     uprightKeywords: ['意志', '前进', '掌控方向', '决心'],
     reversedKeywords: ['失去方向', '急躁', '内在冲突', '推进受阻'],
     traditionalMeaning:
@@ -86,6 +94,7 @@ export const majorArcana: TarotCard[] = [
     number: 8,
     nameEn: 'Strength',
     nameZh: '力量',
+    imageUrl: '/assets/tarot/cards/08-strength.png',
     uprightKeywords: ['勇气', '温柔坚定', '耐心', '自我接纳'],
     reversedKeywords: ['自我怀疑', '情绪失控', '脆弱', '信心不足'],
     traditionalMeaning:
@@ -96,6 +105,7 @@ export const majorArcana: TarotCard[] = [
     number: 9,
     nameEn: 'The Hermit',
     nameZh: '隐者',
+    imageUrl: '/assets/tarot/cards/09-hermit.png',
     uprightKeywords: ['独处', '内省', '寻找答案', '智慧'],
     reversedKeywords: ['孤立', '退缩', '过度思虑', '拒绝指引'],
     traditionalMeaning:
@@ -106,6 +116,7 @@ export const majorArcana: TarotCard[] = [
     number: 10,
     nameEn: 'Wheel of Fortune',
     nameZh: '命运之轮',
+    imageUrl: '/assets/tarot/cards/10-wheel-of-fortune.png',
     uprightKeywords: ['转变', '周期', '机会', '顺势而为'],
     reversedKeywords: ['阻力', '重复模式', '失控感', '延迟'],
     traditionalMeaning:
@@ -116,6 +127,7 @@ export const majorArcana: TarotCard[] = [
     number: 11,
     nameEn: 'Justice',
     nameZh: '正义',
+    imageUrl: '/assets/tarot/cards/11-justice.png',
     uprightKeywords: ['公平', '真相', '责任', '因果'],
     reversedKeywords: ['偏见', '逃避责任', '不公', '自我欺骗'],
     traditionalMeaning:
@@ -126,6 +138,7 @@ export const majorArcana: TarotCard[] = [
     number: 12,
     nameEn: 'The Hanged Man',
     nameZh: '倒吊人',
+    imageUrl: '/assets/tarot/cards/12-hanged-man.png',
     uprightKeywords: ['暂停', '换位思考', '放下', '等待'],
     reversedKeywords: ['停滞', '无谓牺牲', '抗拒改变', '拖延'],
     traditionalMeaning:
@@ -136,6 +149,7 @@ export const majorArcana: TarotCard[] = [
     number: 13,
     nameEn: 'Death',
     nameZh: '死神',
+    imageUrl: '/assets/tarot/cards/13-death.png',
     uprightKeywords: ['结束', '转化', '释放', '新阶段'],
     reversedKeywords: ['抗拒结束', '停滞', '害怕变化', '难以放手'],
     traditionalMeaning:
@@ -146,6 +160,7 @@ export const majorArcana: TarotCard[] = [
     number: 14,
     nameEn: 'Temperance',
     nameZh: '节制',
+    imageUrl: '/assets/tarot/cards/14-temperance.png',
     uprightKeywords: ['平衡', '调和', '耐心', '整合'],
     reversedKeywords: ['失衡', '过度', '急躁', '难以协调'],
     traditionalMeaning:
@@ -156,6 +171,7 @@ export const majorArcana: TarotCard[] = [
     number: 15,
     nameEn: 'The Devil',
     nameZh: '恶魔',
+    imageUrl: '/assets/tarot/cards/15-devil.png',
     uprightKeywords: ['束缚', '欲望', '依赖', '阴影'],
     reversedKeywords: ['觉察束缚', '挣脱', '重新选择', '恢复自主'],
     traditionalMeaning:
@@ -166,6 +182,7 @@ export const majorArcana: TarotCard[] = [
     number: 16,
     nameEn: 'The Tower',
     nameZh: '高塔',
+    imageUrl: '/assets/tarot/cards/16-tower.png',
     uprightKeywords: ['突变', '真相揭露', '旧结构瓦解', '醒悟'],
     reversedKeywords: ['抗拒改变', '延迟危机', '内在动荡', '余震'],
     traditionalMeaning:
@@ -176,6 +193,7 @@ export const majorArcana: TarotCard[] = [
     number: 17,
     nameEn: 'The Star',
     nameZh: '星星',
+    imageUrl: '/assets/tarot/cards/17-star.png',
     uprightKeywords: ['希望', '疗愈', '灵感', '信任未来'],
     reversedKeywords: ['失望', '信心动摇', '与自己疏离', '缺乏灵感'],
     traditionalMeaning:
@@ -186,6 +204,7 @@ export const majorArcana: TarotCard[] = [
     number: 18,
     nameEn: 'The Moon',
     nameZh: '月亮',
+    imageUrl: '/assets/tarot/cards/18-moon.png',
     uprightKeywords: ['潜意识', '不确定', '梦境', '敏感'],
     reversedKeywords: ['迷雾消散', '压抑情绪', '误解', '恐惧浮现'],
     traditionalMeaning:
@@ -196,6 +215,7 @@ export const majorArcana: TarotCard[] = [
     number: 19,
     nameEn: 'The Sun',
     nameZh: '太阳',
+    imageUrl: '/assets/tarot/cards/19-sun.png',
     uprightKeywords: ['喜悦', '清晰', '活力', '成功'],
     reversedKeywords: ['短暂低落', '过度乐观', '延迟喜悦', '自信受阻'],
     traditionalMeaning:
@@ -206,6 +226,7 @@ export const majorArcana: TarotCard[] = [
     number: 20,
     nameEn: 'Judgement',
     nameZh: '审判',
+    imageUrl: '/assets/tarot/cards/20-judgement.png',
     uprightKeywords: ['觉醒', '复盘', '召唤', '自我宽恕'],
     reversedKeywords: ['自我批判', '逃避反思', '犹豫', '拒绝召唤'],
     traditionalMeaning:
@@ -216,6 +237,7 @@ export const majorArcana: TarotCard[] = [
     number: 21,
     nameEn: 'The World',
     nameZh: '世界',
+    imageUrl: '/assets/tarot/cards/21-world.png',
     uprightKeywords: ['完成', '整合', '圆满', '新的循环'],
     reversedKeywords: ['尚未完成', '缺少收尾', '停滞', '需要整合'],
     traditionalMeaning:

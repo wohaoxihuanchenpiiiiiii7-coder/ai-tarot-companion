@@ -9,6 +9,7 @@ interface DrawnCardDisplayProps {
 
 export function DrawnCardDisplay({ drawnCard }: DrawnCardDisplayProps) {
   const [showMeaning, setShowMeaning] = useState(false)
+  const [imageFailed, setImageFailed] = useState(false)
   const { card, orientation, position } = drawnCard
   const keywords =
     orientation === 'upright' ? card.uprightKeywords : card.reversedKeywords
@@ -22,12 +23,31 @@ export function DrawnCardDisplay({ drawnCard }: DrawnCardDisplayProps) {
         aria-expanded={showMeaning}
       >
         <div
-          className={`mx-auto grid aspect-[2/3.15] w-28 place-items-center rounded-xl border border-gold-300 bg-plum-800 px-3 text-center text-cream-50 shadow-card ${
+          className={`mx-auto grid aspect-[2/3] w-36 max-w-full place-items-center overflow-hidden rounded-xl border border-gold-300 bg-plum-800 text-center text-cream-50 shadow-card ${
             orientation === 'reversed' ? 'rotate-180' : ''
           }`}
           aria-hidden="true"
         >
-          <span className="text-3xl text-gold-200">✦</span>
+          {card.imageUrl && !imageFailed ? (
+            <img
+              src={card.imageUrl}
+              alt=""
+              className="h-full w-full object-cover"
+              loading="lazy"
+              draggable={false}
+              onError={() => setImageFailed(true)}
+            />
+          ) : (
+            <span className="tarot-card-back flex h-full w-full flex-col items-center justify-center px-3">
+              <span className="text-3xl text-gold-200">✦</span>
+              <span className="mt-4 font-serif text-lg font-semibold">
+                {card.nameZh}
+              </span>
+              <span className="mt-1 text-[0.65rem] uppercase tracking-wider text-gold-200/80">
+                {card.nameEn}
+              </span>
+            </span>
+          )}
         </div>
         <div className="mt-5 text-center">
           {position && (
