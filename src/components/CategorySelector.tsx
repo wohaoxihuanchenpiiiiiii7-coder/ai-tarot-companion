@@ -7,6 +7,7 @@ type QuestionCategory = Exclude<ReadingCategory, 'daily'>
 interface CategorySelectorProps {
   value: QuestionCategory
   onChange: (category: QuestionCategory) => void
+  disabled?: boolean
 }
 
 const categories: Array<{
@@ -18,7 +19,11 @@ const categories: Array<{
   { id: 'self', symbol: '✦' },
 ]
 
-export function CategorySelector({ value, onChange }: CategorySelectorProps) {
+export function CategorySelector({
+  value,
+  onChange,
+  disabled = false,
+}: CategorySelectorProps) {
   return (
     <div
       className="grid gap-3 sm:grid-cols-3"
@@ -35,8 +40,9 @@ export function CategorySelector({ value, onChange }: CategorySelectorProps) {
             type="button"
             role="radio"
             aria-checked={isSelected}
+            disabled={disabled}
             onClick={() => onChange(category.id)}
-            className={`rounded-card border p-4 text-left transition ${
+            className={`rounded-card border p-4 text-left transition disabled:cursor-not-allowed disabled:opacity-55 ${
               isSelected
                 ? 'border-plum-500 bg-plum-50 shadow-soft'
                 : 'border-plum-100 bg-white/65 hover:border-plum-300 hover:bg-white'

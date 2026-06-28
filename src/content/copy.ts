@@ -54,10 +54,24 @@ export const copy = {
       '请依次选择三张牌，它们将分别代表：问题现状、隐藏原因、行动建议。',
     selectedCount: (count: number, required: number) =>
       `已选择 ${count} / ${required} 张`,
-    loading: '正在为你整理牌面，请稍等片刻……',
+    loading: { zh: '正在生成解读……', en: 'Generating Reading' },
     back: { zh: '返回上一步', en: 'Go Back' },
     chooseCard: (index: number) => `第 ${index + 1} 张塔罗牌背`,
     chosen: '已选择',
+  },
+  generation: {
+    refiningQuestion: { zh: '正在整理问题……', en: 'Refining Question' },
+    errorTitle: { zh: '暂时没有生成成功', en: 'Something Went Wrong' },
+    readingError:
+      '这次解读没有顺利生成。你可以稍后再试，或重新抽取一次。',
+    optimizationError:
+      '这次问题整理没有顺利完成。你可以稍后再试，或直接使用原问题。',
+    dailyLimitReached: {
+      zh: '今日生成次数已达上限',
+      en: 'Daily Limit Reached',
+    },
+    dailyLimitDescription:
+      '为了避免重复生成和控制 AI 调用成本，今天的生成次数已达到上限。你可以明天再来，或查看最近记录。',
   },
   result: {
     pageTitle: { zh: '你的塔罗解读', en: 'Your Tarot Reading' },

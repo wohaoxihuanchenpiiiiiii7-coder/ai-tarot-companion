@@ -1,19 +1,28 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { BilingualLabel } from '../components/BilingualLabel'
 import { PrimaryButton, SecondaryButton } from '../components/Buttons'
 import {
   CategorySelector,
   type QuestionCategory,
 } from '../components/CategorySelector'
+import { GenerationNotice } from '../components/GenerationNotice'
 import { SpreadSelector } from '../components/SpreadSelector'
 import { copy } from '../content/copy'
 import { optimizeMockQuestion } from '../lib/mockAi'
+import {
+  canOptimizeQuestion,
+  recordQuestionOptimization,
+} from '../lib/usageLimit'
 import type { ReadingSetup } from '../types/flow'
 import type { SpreadType } from '../types/tarot'
 
 interface QuestionPageProps {
   onContinue: (setup: ReadingSetup) => void
 }
+
+type OptimizationError = 'error' | 'limit' | null
+
+const MOCK_OPTIMIZATION_DELAY = 650
 
 export function QuestionPage({ onContinue }: QuestionPageProps) {
   const [category, setCategory] = useState<QuestionCategory>('relationship')
@@ -22,12 +31,26 @@ export function QuestionPage({ onContinue }: QuestionPageProps) {
   const [useOptimizedQuestion, setUseOptimizedQuestion] = useState(false)
   const [showSpreadSelection, setShowSpreadSelection] = useState(false)
   const [spreadType, setSpreadType] = useState<SpreadType>('one-card')
+  const [isOptimizing, setIsOptimizing] = useState(false)
+  const [optimizationError, setOptimizationError] =
+    useState<OptimizationError>(null)
+  const optimizationLock = useRef(false)
+  const isMounted = useRef(true)
   const hasQuestion = question.trim().length > 0
+
+  useEffect(() => {
+    isMounted.current = true
+
+    return () => {
+      isMounted.current = false
+    }
+  }, [])
 
   function resetAfterQuestionChange() {
     setOptimizedQuestion(null)
     setUseOptimizedQuestion(false)
     setShowSpreadSelection(false)
+    setOptimizationError(null)
   }
 
   function handleCategoryChange(nextCategory: QuestionCategory) {
@@ -40,14 +63,46 @@ export function QuestionPage({ onContinue }: QuestionPageProps) {
     resetAfterQuestionChange()
   }
 
-  function handleOptimize() {
-    if (!hasQuestion) return
+  async function handleOptimize() {
+    if (!hasQuestion || optimizationLock.current) return
 
-    const result = optimizeMockQuestion({ category, rawQuestion: question })
+    if (!canOptimizeQuestion()) {
+      setOptimizationError('limit')
+      return
+    }
 
-    setOptimizedQuestion(result.optimizedQuestion)
+    optimizationLock.current = true
+    setIsOptimizing(true)
+    setOptimizationError(null)
+    setOptimizedQuestion(null)
     setUseOptimizedQuestion(false)
     setShowSpreadSelection(false)
+    recordQuestionOptimization()
+
+    try {
+      await new Promise((resolve) =>
+        window.setTimeout(resolve, MOCK_OPTIMIZATION_DELAY),
+      )
+      const result = optimizeMockQuestion({ category, rawQuestion: question })
+
+      if (!isMounted.current) return
+
+      setOptimizedQuestion(result.optimizedQuestion)
+    } catch (error) {
+      if (import.meta.env.DEV) {
+        console.error('Question optimization failed', error)
+      }
+
+      if (isMounted.current) {
+        setOptimizationError('error')
+      }
+    } finally {
+      optimizationLock.current = false
+
+      if (isMounted.current) {
+        setIsOptimizing(false)
+      }
+    }
   }
 
   function handleContinue() {
@@ -91,7 +146,11 @@ export function QuestionPage({ onContinue }: QuestionPageProps) {
               />
             </h2>
           </div>
-          <CategorySelector value={category} onChange={handleCategoryChange} />
+          <CategorySelector
+            value={category}
+            onChange={handleCategoryChange}
+            disabled={isOptimizing}
+          />
         </section>
 
         <section className="rounded-card border border-plum-100 bg-white/65 p-5 shadow-sm sm:p-7">
@@ -113,6 +172,7 @@ export function QuestionPage({ onContinue }: QuestionPageProps) {
             id="tarot-question"
             value={question}
             onChange={(event) => handleQuestionChange(event.target.value)}
+            disabled={isOptimizing}
             rows={5}
             placeholder={copy.question.questionPlaceholder}
             className="w-full resize-none rounded-2xl border border-plum-100 bg-cream-50/70 px-4 py-4 text-base leading-7 text-ink-800 outline-none transition placeholder:text-ink-300 focus:border-plum-400 focus:ring-4 focus:ring-plum-100"
@@ -120,18 +180,20 @@ export function QuestionPage({ onContinue }: QuestionPageProps) {
           <div className="mt-4 grid gap-3 sm:grid-cols-2">
             <SecondaryButton
               onClick={handleOptimize}
-              disabled={!hasQuestion}
+              disabled={!hasQuestion || isOptimizing}
               className="gap-3"
             >
               <span aria-hidden="true">✦</span>
               <BilingualLabel
-                {...copy.question.refine}
+                {...(isOptimizing
+                  ? copy.generation.refiningQuestion
+                  : copy.question.refine)}
                 variant="button"
                 align="center"
               />
             </SecondaryButton>
             <PrimaryButton
-              disabled={!hasQuestion}
+              disabled={!hasQuestion || isOptimizing}
               onClick={() => {
                 setUseOptimizedQuestion(false)
                 setShowSpreadSelection(true)
@@ -145,6 +207,24 @@ export function QuestionPage({ onContinue }: QuestionPageProps) {
               />
             </PrimaryButton>
           </div>
+
+          {optimizationError && (
+            <div className="mt-5">
+              <GenerationNotice
+                kind={optimizationError}
+                message={
+                  optimizationError === 'limit'
+                    ? copy.generation.dailyLimitDescription
+                    : copy.generation.optimizationError
+                }
+                onRetry={
+                  optimizationError === 'error'
+                    ? () => void handleOptimize()
+                    : undefined
+                }
+              />
+            </div>
+          )}
 
           {optimizedQuestion && (
             <div className="mt-5 rounded-2xl border border-gold-300 bg-gold-100/70 p-4 sm:p-5">

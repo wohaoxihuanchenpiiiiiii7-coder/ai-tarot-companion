@@ -1,11 +1,17 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { BilingualLabel } from '../components/BilingualLabel'
 import { SecondaryButton } from '../components/Buttons'
+import { GenerationNotice } from '../components/GenerationNotice'
 import { TarotCardBack } from '../components/TarotCardBack'
 import { copy } from '../content/copy'
 import { generateMockTarotReading } from '../lib/mockAi'
 import { drawOneCard, drawThreeCards } from '../lib/tarot'
+import {
+  canGenerateReading,
+  recordReadingGeneration,
+} from '../lib/usageLimit'
 import type { CompletedReading, ReadingSetup } from '../types/flow'
+import type { DrawnCard } from '../types/tarot'
 
 interface DrawPageProps {
   setup: ReadingSetup
@@ -13,31 +19,89 @@ interface DrawPageProps {
   onComplete: (reading: CompletedReading) => void
 }
 
+type GenerationError = 'error' | 'limit' | null
+
 const CARD_BACK_COUNT = 7
+const MOCK_GENERATION_DELAY = 700
 
 export function DrawPage({ setup, onBack, onComplete }: DrawPageProps) {
   const [selectedCards, setSelectedCards] = useState<number[]>([])
-  const [isLoading, setIsLoading] = useState(false)
+  const [pendingDrawnCards, setPendingDrawnCards] =
+    useState<DrawnCard[] | null>(null)
+  const [isGenerating, setIsGenerating] = useState(false)
+  const [generationError, setGenerationError] =
+    useState<GenerationError>(null)
+  const generationLock = useRef(false)
+  const isMounted = useRef(true)
   const requiredCards = setup.spreadType === 'one-card' ? 1 : 3
 
-  function completeReading() {
-    const drawnCards =
-      setup.spreadType === 'one-card' ? [drawOneCard()] : drawThreeCards()
-    const input = { ...setup, drawnCards }
-    const output = generateMockTarotReading(input)
+  useEffect(() => {
+    isMounted.current = true
 
-    onComplete({ input, output })
+    return () => {
+      isMounted.current = false
+    }
+  }, [])
+
+  async function generateReading(drawnCards: DrawnCard[]) {
+    if (generationLock.current) return
+
+    if (!canGenerateReading()) {
+      setGenerationError('limit')
+      return
+    }
+
+    generationLock.current = true
+    setIsGenerating(true)
+    setGenerationError(null)
+    recordReadingGeneration()
+
+    try {
+      await new Promise((resolve) =>
+        window.setTimeout(resolve, MOCK_GENERATION_DELAY),
+      )
+      const input = { ...setup, drawnCards }
+      const output = generateMockTarotReading(input)
+
+      if (!isMounted.current) return
+
+      onComplete({ input, output })
+    } catch (error) {
+      if (import.meta.env.DEV) {
+        console.error('Tarot reading generation failed', error)
+      }
+
+      if (isMounted.current) {
+        setGenerationError('error')
+      }
+    } finally {
+      generationLock.current = false
+
+      if (isMounted.current) {
+        setIsGenerating(false)
+      }
+    }
   }
 
   function handleSelect(index: number) {
-    if (isLoading || selectedCards.includes(index)) return
+    if (
+      isGenerating ||
+      pendingDrawnCards ||
+      generationLock.current ||
+      selectedCards.includes(index)
+    ) {
+      return
+    }
 
     const nextSelection = [...selectedCards, index]
     setSelectedCards(nextSelection)
 
     if (nextSelection.length === requiredCards) {
-      setIsLoading(true)
-      window.setTimeout(completeReading, 700)
+      const drawnCards =
+        setup.spreadType === 'one-card' ? [drawOneCard()] : drawThreeCards()
+
+      setPendingDrawnCards(drawnCards)
+      void generateReading(drawnCards)
     }
   }
 
@@ -59,9 +123,7 @@ export function DrawPage({ setup, onBack, onComplete }: DrawPageProps) {
         </p>
       )}
       <p className="mt-4 text-sm text-ink-500">
-        {isLoading
-          ? copy.draw.loading
-          : copy.draw.selectedCount(selectedCards.length, requiredCards)}
+        {copy.draw.selectedCount(selectedCards.length, requiredCards)}
       </p>
 
       <div className="mx-auto mt-10 grid max-w-4xl grid-cols-3 justify-items-center gap-x-3 gap-y-8 sm:grid-cols-4 sm:gap-6 lg:grid-cols-7">
@@ -70,19 +132,46 @@ export function DrawPage({ setup, onBack, onComplete }: DrawPageProps) {
             key={index}
             index={index}
             selected={selectedCards.includes(index)}
-            disabled={isLoading}
+            disabled={isGenerating || pendingDrawnCards !== null}
             onSelect={handleSelect}
           />
         ))}
       </div>
 
-      {isLoading ? (
-        <div className="mx-auto mt-12 flex max-w-sm items-center justify-center gap-3 rounded-full border border-plum-100 bg-white/70 px-5 py-3 text-sm text-plum-700 shadow-sm">
+      {isGenerating && (
+        <div
+          className="mx-auto mt-12 flex max-w-sm items-center justify-center gap-3 rounded-full border border-plum-100 bg-white/70 px-5 py-3 shadow-sm"
+          role="status"
+        >
           <span className="size-4 animate-spin rounded-full border-2 border-plum-200 border-t-plum-700" />
-          {copy.draw.loading}
+          <BilingualLabel
+            {...copy.draw.loading}
+            variant="button"
+            align="center"
+          />
         </div>
-      ) : (
-        <SecondaryButton onClick={onBack} className="mt-12 gap-3">
+      )}
+
+      {generationError && (
+        <div className="mx-auto mt-10 max-w-xl">
+          <GenerationNotice
+            kind={generationError}
+            message={
+              generationError === 'limit'
+                ? copy.generation.dailyLimitDescription
+                : copy.generation.readingError
+            }
+            onRetry={
+              generationError === 'error' && pendingDrawnCards
+                ? () => void generateReading(pendingDrawnCards)
+                : undefined
+            }
+          />
+        </div>
+      )}
+
+      {!isGenerating && (
+        <SecondaryButton onClick={onBack} className="mt-10 gap-3">
           <span aria-hidden="true">←</span>
           <BilingualLabel
             {...copy.draw.back}
