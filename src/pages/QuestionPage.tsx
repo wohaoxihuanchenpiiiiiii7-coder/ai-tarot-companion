@@ -1,10 +1,12 @@
 import { useState } from 'react'
+import { BilingualLabel } from '../components/BilingualLabel'
 import { PrimaryButton, SecondaryButton } from '../components/Buttons'
 import {
   CategorySelector,
   type QuestionCategory,
 } from '../components/CategorySelector'
 import { SpreadSelector } from '../components/SpreadSelector'
+import { copy } from '../content/copy'
 import { optimizeMockQuestion } from '../lib/mockAi'
 import type { ReadingSetup } from '../types/flow'
 import type { SpreadType } from '../types/tarot'
@@ -41,10 +43,7 @@ export function QuestionPage({ onContinue }: QuestionPageProps) {
   function handleOptimize() {
     if (!hasQuestion) return
 
-    const result = optimizeMockQuestion({
-      category,
-      rawQuestion: question,
-    })
+    const result = optimizeMockQuestion({ category, rawQuestion: question })
 
     setOptimizedQuestion(result.optimizedQuestion)
     setUseOptimizedQuestion(false)
@@ -67,54 +66,69 @@ export function QuestionPage({ onContinue }: QuestionPageProps) {
   return (
     <div className="mx-auto max-w-3xl">
       <div className="mb-8 text-center sm:mb-10">
-        <p className="text-xs font-bold uppercase tracking-[0.22em] text-plum-500">
-          Ask a question
-        </p>
-        <h1 className="mt-3 font-serif text-4xl font-semibold text-plum-950 sm:text-5xl">
-          What is asking for your attention?
+        <h1>
+          <BilingualLabel
+            {...copy.question.pageTitle}
+            variant="pageTitle"
+            align="center"
+          />
         </h1>
-        <p className="mx-auto mt-4 max-w-xl text-sm leading-6 text-ink-500 sm:text-base">
-          You do not need perfect words. Start with what feels present, and we
-          will shape a gentler question together if you would like.
+        <p className="mx-auto mt-4 max-w-xl text-sm leading-7 text-ink-500 sm:text-base">
+          {copy.question.pageDescription}
         </p>
       </div>
 
       <div className="space-y-6">
         <section className="rounded-card border border-plum-100 bg-white/65 p-5 shadow-sm sm:p-7">
-          <div className="mb-5 flex items-center gap-3">
-            <span className="grid size-7 place-items-center rounded-full bg-plum-800 text-xs font-bold text-white">
+          <div className="mb-5 flex items-start gap-3">
+            <span className="grid size-7 shrink-0 place-items-center rounded-full bg-plum-800 text-xs font-bold text-white">
               1
             </span>
-            <h2 className="font-serif text-xl font-semibold text-plum-950">
-              Choose a focus
+            <h2>
+              <BilingualLabel
+                {...copy.question.categoryTitle}
+                variant="sectionTitle"
+              />
             </h2>
           </div>
           <CategorySelector value={category} onChange={handleCategoryChange} />
         </section>
 
         <section className="rounded-card border border-plum-100 bg-white/65 p-5 shadow-sm sm:p-7">
-          <div className="mb-5 flex items-center gap-3">
-            <span className="grid size-7 place-items-center rounded-full bg-plum-800 text-xs font-bold text-white">
+          <div className="mb-5 flex items-start gap-3">
+            <span className="grid size-7 shrink-0 place-items-center rounded-full bg-plum-800 text-xs font-bold text-white">
               2
             </span>
-            <h2 className="font-serif text-xl font-semibold text-plum-950">
-              Share what is on your mind
+            <h2>
+              <BilingualLabel
+                {...copy.question.questionTitle}
+                variant="sectionTitle"
+              />
             </h2>
           </div>
           <label htmlFor="tarot-question" className="sr-only">
-            Your question or concern
+            {copy.question.questionTitle.zh}
           </label>
           <textarea
             id="tarot-question"
             value={question}
             onChange={(event) => handleQuestionChange(event.target.value)}
             rows={5}
-            placeholder="For example: I feel uncertain about the direction of my relationship..."
+            placeholder={copy.question.questionPlaceholder}
             className="w-full resize-none rounded-2xl border border-plum-100 bg-cream-50/70 px-4 py-4 text-base leading-7 text-ink-800 outline-none transition placeholder:text-ink-300 focus:border-plum-400 focus:ring-4 focus:ring-plum-100"
           />
           <div className="mt-4 grid gap-3 sm:grid-cols-2">
-            <SecondaryButton onClick={handleOptimize} disabled={!hasQuestion}>
-              <span aria-hidden="true">✦</span> Optimize with AI
+            <SecondaryButton
+              onClick={handleOptimize}
+              disabled={!hasQuestion}
+              className="gap-3"
+            >
+              <span aria-hidden="true">✦</span>
+              <BilingualLabel
+                {...copy.question.refine}
+                variant="button"
+                align="center"
+              />
             </SecondaryButton>
             <PrimaryButton
               disabled={!hasQuestion}
@@ -123,36 +137,51 @@ export function QuestionPage({ onContinue }: QuestionPageProps) {
                 setShowSpreadSelection(true)
               }}
             >
-              Continue directly
+              <BilingualLabel
+                {...copy.question.drawDirectly}
+                variant="button"
+                tone="inverse"
+                align="center"
+              />
             </PrimaryButton>
           </div>
 
           {optimizedQuestion && (
             <div className="mt-5 rounded-2xl border border-gold-300 bg-gold-100/70 p-4 sm:p-5">
-              <p className="text-[0.65rem] font-bold uppercase tracking-[0.18em] text-plum-600">
-                A clearer reflection question
-              </p>
-              <p className="mt-2 font-serif text-lg leading-7 text-plum-950">
-                “{optimizedQuestion}”
+              <BilingualLabel
+                {...copy.question.refinedTitle}
+                variant="helper"
+              />
+              <p className="mt-3 font-serif text-lg leading-8 text-plum-950">
+                {optimizedQuestion}
               </p>
               <div className="mt-4 flex flex-col gap-2 sm:flex-row">
                 <PrimaryButton
-                  className="min-h-10 py-2"
+                  className="min-h-11 py-2"
                   onClick={() => {
                     setUseOptimizedQuestion(true)
                     setShowSpreadSelection(true)
                   }}
                 >
-                  Use this question
+                  <BilingualLabel
+                    {...copy.question.useQuestion}
+                    variant="button"
+                    tone="inverse"
+                    align="center"
+                  />
                 </PrimaryButton>
                 <SecondaryButton
-                  className="min-h-10 py-2"
+                  className="min-h-11 py-2"
                   onClick={() => {
                     setUseOptimizedQuestion(false)
                     setShowSpreadSelection(true)
                   }}
                 >
-                  Keep my original
+                  <BilingualLabel
+                    {...copy.question.keepOriginal}
+                    variant="button"
+                    align="center"
+                  />
                 </SecondaryButton>
               </div>
             </div>
@@ -161,22 +190,31 @@ export function QuestionPage({ onContinue }: QuestionPageProps) {
 
         {showSpreadSelection && (
           <section className="rounded-card border border-plum-200 bg-white/80 p-5 shadow-soft sm:p-7">
-            <div className="mb-5 flex items-center gap-3">
-              <span className="grid size-7 place-items-center rounded-full bg-plum-800 text-xs font-bold text-white">
+            <div className="mb-5 flex items-start gap-3">
+              <span className="grid size-7 shrink-0 place-items-center rounded-full bg-plum-800 text-xs font-bold text-white">
                 3
               </span>
               <div>
-                <h2 className="font-serif text-xl font-semibold text-plum-950">
-                  Choose your spread
+                <h2>
+                  <BilingualLabel
+                    {...copy.question.spreadTitle}
+                    variant="sectionTitle"
+                  />
                 </h2>
-                <p className="mt-1 text-sm text-ink-500">
-                  How much space would you like to give this reflection?
+                <p className="mt-2 text-sm text-ink-500">
+                  {copy.question.spreadHelper}
                 </p>
               </div>
             </div>
             <SpreadSelector value={spreadType} onChange={setSpreadType} />
-            <PrimaryButton onClick={handleContinue} className="mt-5 w-full">
-              Continue to card draw <span aria-hidden="true">→</span>
+            <PrimaryButton onClick={handleContinue} className="mt-5 w-full gap-3">
+              <BilingualLabel
+                {...copy.question.continueToDraw}
+                variant="button"
+                tone="inverse"
+                align="center"
+              />
+              <span aria-hidden="true">→</span>
             </PrimaryButton>
           </section>
         )}

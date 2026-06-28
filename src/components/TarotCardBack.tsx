@@ -1,3 +1,5 @@
+import { copy } from '../content/copy'
+
 interface TarotCardBackProps {
   index: number
   selected: boolean
@@ -14,7 +16,7 @@ export function TarotCardBack({
   return (
     <button
       type="button"
-      aria-label={`Tarot card back ${index + 1}${selected ? ', selected' : ''}`}
+      aria-label={`${copy.draw.chooseCard(index)}${selected ? `，${copy.draw.chosen}` : ''}`}
       aria-pressed={selected}
       disabled={disabled}
       onClick={() => onSelect(index)}
@@ -31,7 +33,7 @@ export function TarotCardBack({
       </span>
       {selected && (
         <span className="absolute -bottom-3 left-1/2 -translate-x-1/2 rounded-full bg-gold-300 px-2.5 py-1 text-[0.65rem] font-bold uppercase tracking-wider text-plum-950">
-          Chosen
+          {copy.draw.chosen}
         </span>
       )}
     </button>

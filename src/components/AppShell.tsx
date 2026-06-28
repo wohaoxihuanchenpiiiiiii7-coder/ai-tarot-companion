@@ -1,4 +1,6 @@
 import type { ReactNode } from 'react'
+import { copy } from '../content/copy'
+import { BilingualLabel } from './BilingualLabel'
 
 interface AppShellProps {
   children: ReactNode
@@ -14,22 +16,20 @@ export function AppShell({ children, onHome }: AppShellProps) {
             type="button"
             onClick={onHome}
             className="group flex items-center gap-3 text-left"
-            aria-label="Return to home"
+            aria-label={`${copy.result.backHome.zh} / ${copy.result.backHome.en}`}
           >
             <span className="grid size-10 place-items-center rounded-full border border-plum-200 bg-cream-50 text-lg text-plum-700 shadow-sm transition group-hover:-rotate-6">
               ✦
             </span>
-            <span>
-              <span className="block font-serif text-lg font-semibold leading-none text-plum-950">
-                Arcana
-              </span>
-              <span className="mt-1 block text-[0.62rem] font-semibold uppercase tracking-[0.24em] text-plum-500">
-                AI Tarot Companion
-              </span>
-            </span>
+            <BilingualLabel {...copy.brand.name} variant="helper" />
           </button>
-          <span className="hidden rounded-full border border-plum-100 bg-white/60 px-3 py-1.5 text-xs text-plum-600 sm:block">
-            A gentle space to reflect
+          <span className="hidden rounded-full border border-plum-100 bg-white/60 px-4 py-2 sm:block">
+            <BilingualLabel
+              {...copy.brand.headerNote}
+              variant="helper"
+              tone="muted"
+              align="center"
+            />
           </span>
         </div>
       </header>

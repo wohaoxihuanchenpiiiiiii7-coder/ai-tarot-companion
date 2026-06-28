@@ -4,64 +4,62 @@ import type {
   TarotReadingInput,
   TarotReadingOutput,
 } from '../types/ai'
-import type { DrawnCard, ReadingCategory, SpreadType } from '../types/tarot'
+import type {
+  CardOrientation,
+  DrawnCard,
+  ReadingCategory,
+  SpreadType,
+  ThreeCardPosition,
+} from '../types/tarot'
 
 const CATEGORY_LABELS: Record<ReadingCategory, string> = {
-  relationship: 'relationship',
-  career: 'career and future direction',
-  self: 'personal growth and self-reflection',
-  daily: 'day ahead',
+  relationship: '情感关系',
+  career: '事业与未来方向',
+  self: '自我成长',
+  daily: '今天的状态',
 }
 
 const CATEGORY_ACTIONS: Record<ReadingCategory, string> = {
   relationship:
-    'You might write down one need or boundary that matters to you, then choose a calm moment to express it without assuming the other person’s response.',
+    '你可以先写下一项自己真正重视的需要或边界，再选择一个平静的时刻表达它，不急着预设对方的回应。',
   career:
-    'You might choose one small, reversible step—such as gathering information, asking for feedback, or testing an option—before making a larger decision.',
+    '你可以先尝试一个小而可逆的行动，例如搜集一条信息、请教一个有经验的人，或用一小时体验某个方向，再决定下一步。',
   self:
-    'It could be helpful to pause for ten minutes and name what you feel, what you need, and one kind action you can take for yourself today.',
+    '你可以留出十分钟，分别写下“我正在感受什么”“我现在需要什么”和“今天能为自己做的一件小事”。',
   daily:
-    'You might carry this theme into the day by choosing one small moment to pause, notice what is present, and respond with intention.',
+    '一个小的行动方向是：今天遇到需要回应的时刻，先停顿一次呼吸，再选择更贴近自己真实需要的做法。',
 }
 
-const CATEGORY_PROMPTS: Record<ReadingCategory, string[]> = {
-  relationship: [
-    'What need or boundary would you like to express more clearly?',
-    'What part of this situation is within your control right now?',
-  ],
-  career: [
-    'Which option feels most aligned with your values, not only your fears?',
-    'What small experiment could give you useful information this week?',
-  ],
-  self: [
-    'What feeling may be asking for your attention rather than a quick solution?',
-    'What would a gentler next step look like today?',
-  ],
-  daily: [
-    'Where could you bring a little more attention to your day?',
-    'What intention would feel supportive to carry with you?',
-  ],
-}
+const FOLLOW_UP_PROMPTS = [
+  '我现在可以怎么做？',
+  '这张牌想提醒我什么？',
+  '我需要注意什么？',
+]
 
 const SPREAD_LABELS: Record<SpreadType, string> = {
-  'one-card': 'one-card spread',
-  'three-card': 'three-card spread',
+  'one-card': '单张牌解读',
+  'three-card': '三张牌解读',
 }
 
-function describeCard(drawnCard: DrawnCard): string {
-  const { card, orientation, position } = drawnCard
-  const positionLabel = position ?? 'overall message'
+const ORIENTATION_LABELS: Record<CardOrientation, string> = {
+  upright: '正位',
+  reversed: '逆位',
+}
 
-  return `${card.nameEn} (${card.nameZh}), ${orientation}, in the ${positionLabel} position`
+const POSITION_LABELS: Record<ThreeCardPosition, string> = {
+  'current situation': '问题现状',
+  'hidden cause': '隐藏原因',
+  'action suggestion': '行动建议',
 }
 
 function buildCardInsight(drawnCard: DrawnCard): string {
-  const orientationMeaning =
-    drawnCard.orientation === 'upright'
-      ? drawnCard.card.uprightKeywords.join(', ')
-      : drawnCard.card.reversedKeywords.join(', ')
+  const { card, orientation, position } = drawnCard
+  const orientationLabel = ORIENTATION_LABELS[orientation]
+  const positionLabel = position ? POSITION_LABELS[position] : '整体提醒'
+  const keywords =
+    orientation === 'upright' ? card.uprightKeywords : card.reversedKeywords
 
-  return `${describeCard(drawnCard)} may highlight ${orientationMeaning}. Its traditional meaning—${drawnCard.card.traditionalMeaning}—can be treated as an invitation to reflect, not a fixed outcome.`
+  return `${card.nameZh}${orientationLabel}出现在“${positionLabel}”的位置，可能在提醒你关注${keywords.join('、')}。它的传统牌义是：${card.traditionalMeaning}这并不意味着结果已经确定，而是提示你留意当下正在发生的感受与选择。`
 }
 
 export function generateMockTarotReading(
@@ -70,28 +68,28 @@ export function generateMockTarotReading(
   const categoryLabel = CATEGORY_LABELS[input.category]
   const spreadLabel = SPREAD_LABELS[input.spreadType]
   const cardNames = input.drawnCards
-    .map(({ card, orientation }) => `${card.nameEn} (${orientation})`)
-    .join(', ')
-  const question = input.optimizedQuestion ?? input.userQuestion
-  const questionContext = question ? ` around “${question}”` : ''
+    .map(
+      ({ card, orientation }) =>
+        `${card.nameZh}（${ORIENTATION_LABELS[orientation]}）`,
+    )
+    .join('、')
   const cardInsights = input.drawnCards.map(buildCardInsight).join(' ')
-  const cardSummary = cardNames || 'the cards in this reading'
+  const cardSummary = cardNames || '这次出现的牌面'
 
   return {
-    summary: `For your ${categoryLabel} reflection, ${cardSummary} may invite a slower, more compassionate look at what is unfolding.`,
-    emotionalSupport: `It makes sense if this ${categoryLabel} concern feels uncertain or emotionally demanding${questionContext}; you do not need to have every answer at once.`,
-    interpretation: `In this ${spreadLabel}, ${cardInsights || 'the available symbols may offer a starting point for reflection.'}`,
+    summary: `关于${categoryLabel}，${cardSummary}可能在提醒你：先放慢一点，看看此刻真正需要被理解的部分。`,
+    interpretation: `在这次${spreadLabel}中，${cardInsights || '牌面提供了一个重新理解当下的入口。'}`,
+    emotionalSupport: `面对${categoryLabel}中的不确定，感到犹豫、焦虑或暂时没有答案都很正常。你不需要立刻解决所有问题，可以先允许自己看清最在意的那一部分。`,
     actionSuggestion: CATEGORY_ACTIONS[input.category],
-    followUpPrompts: CATEGORY_PROMPTS[input.category],
-    disclaimer:
-      'This tarot reading is for self-reflection and emotional support, not a prediction or medical, legal, financial, or crisis advice.',
+    followUpPrompts: FOLLOW_UP_PROMPTS,
+    disclaimer: '本解读不代表确定预言，仅作为自我探索和情绪梳理的参考。',
   }
 }
 
 function cleanConcern(rawQuestion: string): string {
   const concern = rawQuestion.trim().replace(/[.!?。！？]+$/u, '')
 
-  return concern || 'what is currently on my mind'
+  return concern || '此刻让我在意的事情'
 }
 
 export function optimizeMockQuestion(
@@ -99,17 +97,17 @@ export function optimizeMockQuestion(
 ): OptimizeQuestionOutput {
   const concern = cleanConcern(input.rawQuestion)
   const optimizedQuestions: Record<ReadingCategory, string> = {
-    relationship: `What can I understand about my needs and boundaries in relation to “${concern}”, and what small step could support clearer communication?`,
-    career: `How can I better understand what is behind “${concern}” and take a small step toward a clearer career direction?`,
-    self: `What might “${concern}” reveal about my current needs, and what small supportive step can I take?`,
-    daily: `How can I approach “${concern}” with greater awareness and choose one supportive intention for today?`,
+    relationship: `我可以怎样理解“${concern}”背后的情感需要与边界，并尝试一次更清楚的沟通？`,
+    career: `我可以怎样理解自己面对“${concern}”时的焦虑，并为更清晰的事业方向迈出一个小步骤？`,
+    self: `“${concern}”可能反映了我怎样的内在需要，我可以如何更温柔地回应自己？`,
+    daily: `今天面对“${concern}”时，我可以带着怎样的觉察，并选择一个支持自己的行动？`,
   }
 
   return {
     optimizedQuestion: optimizedQuestions[input.category],
     alternativeQuestions: [
-      `What part of “${concern}” is within my influence right now?`,
-      `What would a gentle and realistic next step around “${concern}” look like?`,
+      `关于“${concern}”，现在有哪些部分是我可以影响的？`,
+      `面对“${concern}”，一个温和而实际的下一步会是什么？`,
     ],
   }
 }

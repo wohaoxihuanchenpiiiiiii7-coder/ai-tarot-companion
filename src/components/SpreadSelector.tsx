@@ -1,35 +1,27 @@
+import { copy } from '../content/copy'
 import type { SpreadType } from '../types/tarot'
+import { BilingualLabel } from './BilingualLabel'
 
 interface SpreadSelectorProps {
   value: SpreadType
   onChange: (spread: SpreadType) => void
 }
 
-const spreads: Array<{
-  id: SpreadType
-  label: string
-  description: string
-  cardCount: number
-}> = [
-  {
-    id: 'one-card',
-    label: 'One card',
-    description: 'A focused message for this moment',
-    cardCount: 1,
-  },
-  {
-    id: 'three-card',
-    label: 'Three cards',
-    description: 'Situation, hidden cause, and action',
-    cardCount: 3,
-  },
+const spreads: Array<{ id: SpreadType; cardCount: number }> = [
+  { id: 'one-card', cardCount: 1 },
+  { id: 'three-card', cardCount: 3 },
 ]
 
 export function SpreadSelector({ value, onChange }: SpreadSelectorProps) {
   return (
-    <div className="grid gap-3 sm:grid-cols-2" role="radiogroup" aria-label="Tarot spread">
+    <div
+      className="grid gap-3 sm:grid-cols-2"
+      role="radiogroup"
+      aria-label={copy.question.spreadTitle.zh}
+    >
       {spreads.map((spread) => {
         const isSelected = spread.id === value
+        const spreadCopy = copy.spreads[spread.id]
 
         return (
           <button
@@ -53,11 +45,9 @@ export function SpreadSelector({ value, onChange }: SpreadSelectorProps) {
               ))}
             </span>
             <span>
-              <span className="block font-serif text-lg font-semibold text-plum-950">
-                {spread.label}
-              </span>
-              <span className="mt-1 block text-sm text-ink-500">
-                {spread.description}
+              <BilingualLabel {...spreadCopy.label} variant="option" />
+              <span className="mt-3 block text-sm leading-5 text-ink-500">
+                {spreadCopy.description}
               </span>
             </span>
           </button>

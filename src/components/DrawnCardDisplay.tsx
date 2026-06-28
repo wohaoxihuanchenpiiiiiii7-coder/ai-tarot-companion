@@ -1,5 +1,7 @@
 import { useState } from 'react'
+import { copy } from '../content/copy'
 import type { DrawnCard } from '../types/tarot'
+import { BilingualLabel } from './BilingualLabel'
 
 interface DrawnCardDisplayProps {
   drawnCard: DrawnCard
@@ -29,28 +31,50 @@ export function DrawnCardDisplay({ drawnCard }: DrawnCardDisplayProps) {
         </div>
         <div className="mt-5 text-center">
           {position && (
-            <p className="text-[0.65rem] font-bold uppercase tracking-[0.18em] text-plum-500">
-              {position}
-            </p>
+            <BilingualLabel
+              {...copy.positions[position]}
+              variant="helper"
+              align="center"
+            />
           )}
-          <h3 className="mt-1 font-serif text-xl font-semibold text-plum-950">
-            {card.nameEn}
+          <h3 className={position ? 'mt-4' : ''}>
+            <BilingualLabel
+              zh={card.nameZh}
+              en={card.nameEn}
+              variant="option"
+              align="center"
+            />
           </h3>
-          <p className="text-sm text-ink-500">{card.nameZh}</p>
-          <span className="mt-3 inline-flex rounded-full bg-plum-50 px-3 py-1 text-xs font-semibold capitalize text-plum-700">
-            {orientation}
+          <span className="mt-3 inline-flex rounded-full bg-plum-50 px-3 py-2">
+            <BilingualLabel
+              {...copy.orientations[orientation]}
+              variant="helper"
+              align="center"
+            />
           </span>
           <p className="mt-3 text-xs leading-5 text-ink-500">{keywords.join(' · ')}</p>
-          <p className="mt-4 text-xs font-semibold text-plum-700">
-            {showMeaning ? 'Hide traditional meaning' : 'View traditional meaning'}
-          </p>
+          <span className="mt-4 block">
+            <BilingualLabel
+              {...(showMeaning
+                ? copy.result.hideMeaning
+                : copy.result.viewMeaning)}
+              variant="helper"
+              align="center"
+            />
+          </span>
         </div>
       </button>
 
       {showMeaning && (
-        <p className="mt-4 border-t border-plum-100 pt-4 text-sm leading-6 text-ink-600">
-          {card.traditionalMeaning}
-        </p>
+        <div className="mt-4 border-t border-plum-100 pt-4">
+          <BilingualLabel
+            {...copy.result.traditionalMeaning}
+            variant="helper"
+          />
+          <p className="mt-3 text-sm leading-7 text-ink-600">
+            {card.traditionalMeaning}
+          </p>
+        </div>
       )}
     </article>
   )

@@ -1,4 +1,6 @@
+import { copy } from '../content/copy'
 import type { ReadingCategory } from '../types/tarot'
+import { BilingualLabel } from './BilingualLabel'
 
 type QuestionCategory = Exclude<ReadingCategory, 'daily'>
 
@@ -10,34 +12,22 @@ interface CategorySelectorProps {
 const categories: Array<{
   id: QuestionCategory
   symbol: string
-  label: string
-  description: string
 }> = [
-  {
-    id: 'relationship',
-    symbol: '♡',
-    label: 'Relationship',
-    description: 'Connection, needs, and boundaries',
-  },
-  {
-    id: 'career',
-    symbol: '◇',
-    label: 'Career',
-    description: 'Direction, choices, and confidence',
-  },
-  {
-    id: 'self',
-    symbol: '✦',
-    label: 'Self',
-    description: 'Emotions, patterns, and growth',
-  },
+  { id: 'relationship', symbol: '♡' },
+  { id: 'career', symbol: '◇' },
+  { id: 'self', symbol: '✦' },
 ]
 
 export function CategorySelector({ value, onChange }: CategorySelectorProps) {
   return (
-    <div className="grid gap-3 sm:grid-cols-3" role="radiogroup" aria-label="Reading category">
+    <div
+      className="grid gap-3 sm:grid-cols-3"
+      role="radiogroup"
+      aria-label={copy.question.categoryTitle.zh}
+    >
       {categories.map((category) => {
         const isSelected = category.id === value
+        const categoryCopy = copy.categories[category.id]
 
         return (
           <button
@@ -55,11 +45,9 @@ export function CategorySelector({ value, onChange }: CategorySelectorProps) {
             <span className="mb-4 grid size-9 place-items-center rounded-full bg-gold-200 text-lg text-plum-900">
               {category.symbol}
             </span>
-            <span className="block font-serif text-lg font-semibold text-plum-950">
-              {category.label}
-            </span>
-            <span className="mt-1 block text-sm leading-5 text-ink-500">
-              {category.description}
+            <BilingualLabel {...categoryCopy.label} variant="option" />
+            <span className="mt-3 block text-sm leading-5 text-ink-500">
+              {categoryCopy.description}
             </span>
           </button>
         )
